@@ -34,6 +34,7 @@
 		issue_date_th: string;
 		expiry_date: string;
 		expiry_date_th: string;
+		religion: string;
 		laser_code: string;
 		detection_score: number;
 		raw_text: string;
@@ -233,6 +234,13 @@
 								{:else}
 									{thaiIdData.en_name || 'Not detected'}
 								{/if}
+							</div>
+						</div>
+						
+						<div>
+							<label class="block text-sm font-medium text-gray-700">ศาสนา (Religion)</label>
+							<div class="mt-1 p-2 bg-gray-50 rounded border thai-text">
+								{thaiIdData.religion || 'Not detected'}
 							</div>
 						</div>
 					</div>

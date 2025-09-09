@@ -19,6 +19,7 @@ interface ThaiIdCard {
 	issue_date_th: string;
 	expiry_date: string;
 	expiry_date_th: string;
+	religion: string;
 	laser_code: string; // Code below the photo
 	detection_score: number;
 	raw_text: string;
@@ -98,6 +99,7 @@ function parseThaiIdCard(visionResponse: any): ThaiIdCard {
 		issue_date_th: '',
 		expiry_date: '',
 		expiry_date_th: '',
+		religion: '',
 		laser_code: '',
 		detection_score: 0,
 		raw_text: ''
@@ -200,6 +202,12 @@ function parseThaiIdCard(visionResponse: any): ThaiIdCard {
 		}
 	}
 
+	// Religion pattern - extract text after "ศาสนา" until newline or "ที่อยู่"
+	const religionMatch = fullText.match(/ศาสนา\s+([ก-๏]+)(?=\s|$|\n|ที่อยู่)/i);
+	if (religionMatch) {
+		defaultResponse.religion = religionMatch[1].trim();
+	}
+
 	// Laser code pattern (code below the photo) - typically format like "2004-03-07261317"
 	const laserCodeMatch = normalizedText.match(/(\d{4}-\d{2}-\d{8}|\d{14})/);
 	if (laserCodeMatch) {
@@ -222,6 +230,7 @@ function parseThaiIdCard(visionResponse: any): ThaiIdCard {
 	if (defaultResponse.birth_date_th) score += 5;
 	if (defaultResponse.issue_date) score += 5;
 	if (defaultResponse.expiry_date) score += 5;
+	if (defaultResponse.religion) score += 5;
 	if (defaultResponse.laser_code) score += 5;
 	
 	defaultResponse.detection_score = score;
